@@ -43,13 +43,12 @@ class Cryptr:
 
         if(option == '1'):
 
-
-
-
             bytefiles = self.getInputFiles(self.InputDir)
             if bytefiles:
                 key = self.genHash()
                 self.encryptData(key, bytefiles)
+                print(f"Succesfully encrypted your Data with AES256 to: {self.VaultDir}")
+                input("Press any key to continue...")
             else:
                 print("No Files were found in: " + self.InputDir)
                 time.sleep(2)
@@ -62,6 +61,7 @@ class Cryptr:
             bytefiles = self.getInputFiles(self.VaultDir)
             if bytefiles:
                 key = self.genHash()
+
                 self.decryptData(key, bytefiles)
             else:
                 print("No Files were found in: " + self.VaultDir)
@@ -87,6 +87,14 @@ class Cryptr:
 
         elif(option == "4"):
             quit()
+
+        elif(option == ""):
+            self.menu()
+
+        else:
+            print("Command not found...")
+            input()
+            self.menu()
 
     def purgeDirs(self, Directory):
 
@@ -179,6 +187,8 @@ class Cryptr:
 
 
             self.writeFiles(decryptedFiles, self.OutputDir)
+            print(f"Succesfully decrypted your Data with AES256 to: {self.OutputDir}")
+            input("Press any key to continue...")
         except ValueError:
             print("It seems that the Password you used was wrong...")
             time.sleep(1)
