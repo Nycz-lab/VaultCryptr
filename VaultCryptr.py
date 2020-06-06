@@ -76,11 +76,13 @@ class Cryptr:
                 print("deleting...")
                 self.purgeDirs(self.InputDir)
                 self.purgeDirs(self.OutputDir)
-                time.sleep(2)
+                time.sleep(1)
+                print("Done!")
+                input("Press any key to continue...")
             else:
 
                 print("aborting...")
-                time.sleep(2)
+                time.sleep(1)
             self.menu()
 
         elif(option == "4"):
@@ -162,20 +164,25 @@ class Cryptr:
 
         i = 0
 
-        for dic_key in bytefiles:
+        try:
+            for dic_key in bytefiles:
 
-            iv = bytefiles[dic_key]['iv']
-            cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+                iv = bytefiles[dic_key]['iv']
+                cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
-            decrypted = cipher.decrypt(bytefiles[dic_key]['content'])
-            unenc = unpad(decrypted, AES.block_size)
-            decryptedFiles[str(i)] = {}
-            decryptedFiles[str(i)]['name'] = bytefiles[dic_key]['name'].split('.enc')[0]
-            decryptedFiles[str(i)]['content'] = unenc
-            i+=1
+                decrypted = cipher.decrypt(bytefiles[dic_key]['content'])
+                unenc = unpad(decrypted, AES.block_size)
+                decryptedFiles[str(i)] = {}
+                decryptedFiles[str(i)]['name'] = bytefiles[dic_key]['name'].split('.enc')[0]
+                decryptedFiles[str(i)]['content'] = unenc
+                i+=1
 
 
-        self.writeFiles(decryptedFiles, self.OutputDir)
+            self.writeFiles(decryptedFiles, self.OutputDir)
+        except ValueError:
+            print("It seems that the Password you used was wrong...")
+            time.sleep(1)
+            input("Press any key to continue...")
 
 
     def writeFiles(self, files, Directory):
